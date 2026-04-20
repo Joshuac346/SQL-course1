@@ -6,10 +6,20 @@ This lists 44 patients admitted to London hospitals over 5 days between Feb 26th
 */
 
 SELECT
-	*
+	ps.PatientID
+	, ps.AdmittedDate
+	, ps.DischargeDate
+	, DATEADD(WEEK, -2, ps.AdmittedDate) AS [Reminder Date]
+	, DATEADD(MONTH, 3, ps.DischargeDate) AS [Appointment Date]
+	, DATEDIFF(DAY, ps.AdmittedDate, ps.DischargeDate) AS [Length Of Stay]
+	, ps.hospital
+	, ps.Ward
 FROM
-	PatientStay ps ;
-
+	PatientStay ps
+WHERE ps.Hospital IN ('Kingston', 'pruh')
+	AND ps.Ward LIKE '%Surgery'
+	AND ps.AdmittedDate BETWEEN '2024-02-27' and '2024-03-01'
+ORDER BY ps.AdmittedDate DESC, ps.DischargeDate ASC
 /*
 1. Filter the list the patients to show only those  -
 a) in the Oxleas hospital,
