@@ -20,6 +20,31 @@ WHERE ps.Hospital IN ('Kingston', 'pruh')
 	AND ps.Ward LIKE '%Surgery'
 	AND ps.AdmittedDate BETWEEN '2024-02-27' and '2024-03-01'
 ORDER BY ps.AdmittedDate DESC, ps.DischargeDate ASC
+
+SELECT top 5
+	ps.Hospital 
+	, ps.Ward
+	, COUNT (*) AS [Number of Patients]
+	, SUM(ps.Tariff) AS [Total Tariff]
+
+FROM
+	PatientStay ps
+GROUP BY ps.Hospital, ps.Ward
+ORDER BY [Total Tariff] DESC
+
+SELECT *
+FROM DimHospital
+
+SELECT
+	ps.PatientId
+	, ps.AdmittedDate
+	, h.HospitalType
+	, h.Reach
+FROM
+	PatientStay ps LEFT JOIN DimHospitalBad h ON ps.Hospital = h.Hospital
+
+
+
 /*
 1. Filter the list the patients to show only those  -
 a) in the Oxleas hospital,
